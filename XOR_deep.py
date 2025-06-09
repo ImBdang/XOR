@@ -51,7 +51,7 @@ class NeuralNerwork:
         error_output = targets - self.final_activation 
         #tinh delta, (chenh lech loi) * (dao ham cua ham kich hoat)
         delta_output = error_output * sigmoid_derivative(self.final_activation)
-
+        # print(f"Gradient: {delta_output}")
         #cap nhat trong so cho Wo (weight out)
         #self.all_hidden_activations[-1] la dau ra cua hidden_neural cuoi cung, tuc day la input ket hop voi Wo, input cua neural cuoi cung
         self.Wo += self.all_hidden_activations[-1].T.dot(delta_output)
@@ -70,15 +70,18 @@ class NeuralNerwork:
         #tinh delta cho hidden_neural cuoi cung
         #cthuc: previous_delta * (next layer weights).T * dao ham cua ham kich hoat (sigmoid_derivative)
         delta_hidden = delta_output.dot(self.Wo.T) * sigmoid_derivative(self.all_hidden_activations[-1])
-
+        # print(f"Gradient: {delta_hidden}")
         #bay gio da co delta cua hidden_neural cuoi cung, ta co the tu no de lan truyen nguoc lai cac hidden_neural truoc do
         #range(start, end, step), bat dau tu cuoi len dau, start tu phan tu cuoi cung - 1 (bat dau tu 0), end la -1 tai vi phan tu dau tien la 0, step -1 de no di lui
         for i in range(len(self.Wh) - 1, -1, -1):
+
             self.Wh[i] += self.all_hidden_activations[i].T.dot(delta_hidden)  #cap nhat trong so cho hidden_neural
             delta_hidden = delta_hidden.dot(self.Wh[i].T) * sigmoid_derivative(self.all_hidden_activations[i])  #cap nhap delta_hidden de tiep tuc su dung cho cac hidden_neural tiep theo
+            # print(f"Gradient: {delta_hidden}")
         
         #tai day su dung inputs, tai vi inputs chinh la dau vao cua neural dau tien
         self.Wi += inputs.T.dot(delta_hidden)
+        print(f"Gradient: {delta_hidden}")
         
     def train(self, inputs, targets, epochs=10000):
         for epoch in range(epochs):
@@ -94,6 +97,36 @@ def main():
     X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]]) 
     Y = np.array([[0], [1], [1], [0]])  
     soluong_hidden_layer = 2 #max la 3, neu de la 4 hoac to hon se xay ra hien tuong vanishing gradient dan toi du doan khong dung
+    '''
+    Gradient: [[ 2.69169947e-03  2.69214639e-03 -3.71110513e-03]
+    [-7.47686723e-05 -7.17441129e-06  2.04736480e-05]
+    [-7.07202701e-06 -7.51602489e-05  2.06350209e-05]
+    [ 3.88383268e-05  3.91355063e-05 -9.46054761e-09]]
+    Ben tren la gia tri gradient cua lop an cuoi cung khi backpropagation
+    khi hidden layer = 2, cac gia tri gradient chu yeu nam trong khoang 10^-3 ~ 10^-5
+    0 XOR 0 = 0.0318
+    0 XOR 1 = 0.9805  
+    1 XOR 0 = 0.9805  
+    1 XOR 1 = 0.0068
+    ket qua cho ra co the noi la chinh xac
+
+    Nhung sau khi doi so luong hidden layer = 5 thi day la su khac biet
+    Gradient: [[-8.57810094e-07 -7.40888173e-07 -9.54381472e-07]
+    [ 7.26246966e-07  5.94622824e-07  8.44829576e-07]
+    [ 6.48842567e-07  5.10892815e-07  8.07740878e-07]
+    [-4.73110202e-07 -3.21143855e-07 -7.12072451e-07]]
+    gradient nam trong khoang 10^-7, tuc no da nho hon gap 100 lan so voi hidden layer = 2
+    dieu nay la vi doi voi mot bai toan qua don gian nhu nay
+    nhung lai de so luong layer qua nhieu, sau cac chuoi bien doi toan hoc qua tung lop
+    gradient da nho den muc khong the cap nhat trong so duoc nua
+    hay noi cach khac gradient khong du lon de trong so thay doi
+    day chinh la hien tuong vanishing gradient
+    0 XOR 0 = 0.5000
+    0 XOR 1 = 0.5000
+    1 XOR 0 = 0.5000
+    1 XOR 1 = 0.5000
+    day la ket qua
+    '''
     network = NeuralNerwork(input_size=2, hidden_size=3, num_hidden_layer=soluong_hidden_layer, output_size=1)
     network.train(X, Y, epochs=10000)
 
