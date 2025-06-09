@@ -65,6 +65,10 @@ class NeuralNerwork:
         delta_output = (output - targets) * sigmoid_derivative(final_activation)
         self.Wo -= self.all_hidden_activations[-1].T.dot(delta_output)
         chi can dao vi tri output va targets la duoc
+
+        thuc chat learning rate cua chung ta o day la 1 (ma nhan voi 1 thi ghi vao cung cha co tac dung gi)
+        toi da thu thay lr = 0.1 hay 0.001, nhan ra voi bai toan don gian nay lr qua be thi no lai lam du doan sai di
+        cho nen lr = 1 co ve la phu hop nhat voi bai toan XOR nay
         '''
 
         #tinh delta cho hidden_neural cuoi cung
