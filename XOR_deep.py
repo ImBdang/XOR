@@ -10,6 +10,7 @@ def sigmoid_derivative(x):
 
 class NeuralNerwork:
     def __init__(self, input_size, hidden_size, num_hidden_layer, output_size):
+        np.random.seed(42)  
         self.Wi = np.random.rand(input_size, hidden_size)
         self.Wo = np.random.rand(hidden_size, output_size)
         self.Wh = []
@@ -102,23 +103,23 @@ def main():
     Y = np.array([[0], [1], [1], [0]])  
     soluong_hidden_layer = 2 #max la 3, neu de la 4 hoac to hon se xay ra hien tuong vanishing gradient dan toi du doan khong dung
     '''
-    Gradient: [[ 2.69169947e-03  2.69214639e-03 -3.71110513e-03]
-    [-7.47686723e-05 -7.17441129e-06  2.04736480e-05]
-    [-7.07202701e-06 -7.51602489e-05  2.06350209e-05]
-    [ 3.88383268e-05  3.91355063e-05 -9.46054761e-09]]
+    Gradient: [[ 2.51457867e-04  2.49592492e-04 -3.97582583e-04]
+    [-4.30928209e-06 -3.57867748e-05  9.85362439e-06]
+    [-4.06004613e-05 -3.04399613e-06  7.54324690e-06]
+    [ 2.18802597e-05  1.82842456e-05 -5.15937142e-08]]
     Ben tren la gia tri gradient cua lop an cuoi cung khi backpropagation
     khi hidden layer = 2, cac gia tri gradient chu yeu nam trong khoang 10^-3 ~ 10^-5
-    0 XOR 0 = 0.0318
-    0 XOR 1 = 0.9805  
-    1 XOR 0 = 0.9805  
-    1 XOR 1 = 0.0068
+    0 XOR 0 = 0.0092
+    0 XOR 1 = 0.9919
+    1 XOR 0 = 0.9918
+    1 XOR 1 = 0.0057
     ket qua cho ra co the noi la chinh xac
 
     Nhung sau khi doi so luong hidden layer = 5 thi day la su khac biet
-    Gradient: [[-8.57810094e-07 -7.40888173e-07 -9.54381472e-07]
-    [ 7.26246966e-07  5.94622824e-07  8.44829576e-07]
-    [ 6.48842567e-07  5.10892815e-07  8.07740878e-07]
-    [-4.73110202e-07 -3.21143855e-07 -7.12072451e-07]]
+    Gradient: [[ 2.43619231e-06 -1.13919314e-07  1.17603320e-06]
+    [-1.98926811e-06  1.71421189e-07 -1.02002735e-06]
+    [-2.00646227e-06  1.40274533e-07 -8.53559297e-07]
+    [ 1.48394099e-06 -1.59441360e-07  7.00048208e-07]]
     gradient nam trong khoang 10^-7, tuc no da nho hon gap 100 lan so voi hidden layer = 2
     dieu nay la vi doi voi mot bai toan qua don gian nhu nay
     nhung lai de so luong layer qua nhieu, sau cac chuoi bien doi toan hoc qua tung lop
